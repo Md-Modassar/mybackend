@@ -174,9 +174,18 @@ let persons= [
  
  router.post("/test-query1",function(req,res){
      let votingage=req.query.input
-     let finalarray=persons.filter(x=>x.age>votingage)
+     //let finalarray=persons.filter(x=>x.age>votingage)
+     let finalarr=[]
+     persons.forEach((person)=>{
+        if(person.age>votingage)
+        {
+            person.votingStatus=true
+            finalarr.push(person)
+
+        }
+     })
  
-     res.send({data:finalarray,statuse:true})
+    return res.send({finalarr:finalarr})
        
  })
 //filter out all the numbers that are greater than "input" ( input is received from query params)
