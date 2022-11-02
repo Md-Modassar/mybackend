@@ -2,7 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const route = require('./routes/route.js');
 const { default: mongoose } = require('mongoose');
+const newMW=require('./middlewares/newMiddleware.js')
 const app = express();
+const ip=require('ip');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,6 +22,7 @@ app.use (
         next();
   }
   );
+  app.use(newMW.newmiddelware)
 
 app.use('/', route);
 
