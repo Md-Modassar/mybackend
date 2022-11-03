@@ -31,13 +31,13 @@ const myOtherMiddleware = function(req, res, next){
     // The header value comparison is done once and
     // the result can be used directly wherever required.
     let acceptHeaderValue = req.headers["accept"]
-
-    if(acceptHeaderValue == "application/json") {
+    console.log(acceptHeaderValue)
+   /* if(acceptHeaderValue == "application/json") {
         req.wantsJson = true
     } else {
         req.wantsJson = false
     }
-    next()
+    next()*/
 }
 
 module.exports.mid1= mid1
