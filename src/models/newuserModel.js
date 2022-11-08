@@ -3,7 +3,7 @@ const mongoose=require('mongoose')
 const newuserSchema=new mongoose.Schema({
  
     firstName: String,
-    lastName :String,
+    lastName :{type:String,require:true},
     mobile : String,
     emailId : String,
     password: String,

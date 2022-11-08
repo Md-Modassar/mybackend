@@ -4,7 +4,7 @@ const newuserModel=require('../models/newuserModel')
 const createnewuser=async function(req,res){
     const data=req.body
     const savedData=await newuserModel.create(data)
-    res.send({data:savedData})
+    res.status(201).send({data:savedData})
 }
 
 const newlogin=async function(req,res)
@@ -13,7 +13,7 @@ const newlogin=async function(req,res)
     const password=req.body.password
 
     const newuser=await newuserModel.findOne({emailId:emailId,password:password})
-    if(!newuser) return res.send("email or password is not correct")
+    if(!newuser) return res.status(400).send("email or password is not correct")
 
     let token=jwt.sign({
         userId:newuser._id,
@@ -24,7 +24,7 @@ const newlogin=async function(req,res)
     );
 
     res.setHeader("x-auth-token",token)
-    res.send({status:true,data:token})
+    res.status(200).send({status:true,data:token})
 
 
 }
@@ -33,12 +33,20 @@ const newlogin=async function(req,res)
 const newgetuserdata=async function(req,res)
 {
    
-    let userid=req.params.userId
-    const userdata=await newuserModel.findById(userid)
-    if(!userdata)
-      return res.send({status:true, msg:"not exists such as userid"})
+   try{ let userid=req.params.userId
 
-      return res.send({status:true,data:userdata})
+   // const decode=req.userId
+   // console.log(decode)
+
+    const userdata=await newuserModel.findById(userid)
+      if(!userdata)
+      return res.status(404).send({status:true, msg:"not exists such as userid"})
+
+      return res.status(200).send({status:true,data:userdata})
+   }
+   catch(error){
+     res.status(500).send({status:false,msg:error})
+   }
 
 
 }
@@ -46,27 +54,39 @@ const newgetuserdata=async function(req,res)
 const newupdate=async function(req,res){
    
    
-   const userid=req.params.userId
+   try{const userid=req.params.userId
    /* const userdata=await newuserModel.findById(userid)
     if(!userdata)
       return res.send("that is not correct userid")*/
 
       const data=req.body
       const update=await newuserModel.findOneAndUpdate({_id:userid},data)
-       res.send({status:true,msg:update})
+      console.log("ok")
+     res.status(200).send({status:true,msg:update})
+   }catch(error){
+    res.status(500).send({msg:error})
+   }
     
 }
 
 const deletedata=async function(req,res){
    
 
-       const userid=req.params.userId
+       try{
+        const userid=req.params.userId
+
+      /* const decode=req.userId
+       console.log(decode)*/
+
       /* const userdata=await newuserModel.findById(userid)
        if(!userdata)
        return res.send("user id is not correct")*/
 
        const updatedelete=await newuserModel.findOneAndUpdate({_id:userid},{$set:{isDeleted:true}})
-       res.send({status:true,data:updatedelete})
+       res.status(200).send({status:true,data:updatedelete})
+       }catch(error){
+        res.status(500).send({status:false,msg:error})
+       }
 }
 
 
