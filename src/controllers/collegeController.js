@@ -17,14 +17,16 @@ const createCollege = async (req, res) => {
 
 
 const getcollegedetails = async function (req, res) {
+  
    try {
+      res.setHeader('Access-Control-Allow-Origin','*')
       const collegename = req.query.collegeName
 
       if (!isValid(collegename)) return res.status(400).send({ status: false, msg: "please enter valide college name" })
 
       const els = collegename.toLowerCase()
       if (collegename != els) {
-         return res.status(404).send({ status: false, satmsg: "it should be in lowercase " })
+         return res.status(400).send({ status: false, satmsg: "it should be in lowercase " })
       }
 
       const collegedetail = await collegeModels.findOne({ name: collegename })
@@ -37,7 +39,7 @@ const getcollegedetails = async function (req, res) {
       const interns = await interModels.find({ collegeId: _id }).select({ name: 1, email: 1, mobile: 1 })
 
       if (interns.length == 0) {
-         return res.status(404).send({ status: false, msg: "no interns founds" })
+         return res.status(400).send({ status: false, msg: "no interns founds" })
       }
 
       let data = {
@@ -48,7 +50,7 @@ const getcollegedetails = async function (req, res) {
 
       }
 
-      return res.status(200).send({ status: true, data: data })
+      return res.status(201).send({ status: true, data: data })
    }
    catch (error) { return res.status(500).send({ status: false, msg: error.message }) }
 

@@ -5,11 +5,11 @@ const internController=require("../controllers/InternController")
 const collegeValidator=require('../Middlewares/collegeValidator')
 const collegeController=require('../controllers/collegeController')
 
-router.post('/functionup/colleges',collegeValidator.collegeValidator,collegeController.createCollege)
-router.get("/functionup/collegeDetails",collegeController.getcollegedetails)
+router.post('/colleges',collegeValidator.collegeValidator,collegeController.createCollege)
+router.get("/collegeDetails",collegeController.getcollegedetails)
 
 //-----------------------> create Intern <----------------------------->>
-router.post("/functionup/interns",internController.createIntern)
+router.post("/interns",internController.createIntern)
 
 //-----------------------> error handling route <----------------------->>
 router.all("/*",function(req,res){

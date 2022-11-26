@@ -6,7 +6,9 @@ const { isValidEmail, isValid, isValidMobile } = require("../Middlewares/InternV
 
 const createIntern = async function (req, res) {
     try {
+        res.setHeader('Access-Control-Allow-Origin','*')
         let Data = req.body
+        console.log(Data)
         const { name, email, mobile, collegeName } = Data
         //--------------------------->> Check Validation <<---------------------------->>>
         if (Object.keys(Data).length == 0) {
