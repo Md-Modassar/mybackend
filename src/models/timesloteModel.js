@@ -6,8 +6,9 @@ const timeslotschema=new mongoose.Schema({
     slot:[{time:{type:String,default:"10.00.am"},
              userId:{type:objectId,ref:'user'},
             date:{type:Date,default:new Date()},
-           booking:Number}],
-    slotno:{type:Number,default:1}       
+            status:String}],
+    slotno:{type:Number,default:1} ,
+          
     
     
 },{timestamps:true})

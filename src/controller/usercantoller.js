@@ -35,26 +35,30 @@ exports.createuser=async function(req,res){
   const savedata=await usermodel.create(data)
   for(let i=1; i<15; i++)
   {
-    console.log("==="+savedata._id)
+    
   const tsl=await timeslot.findOne({slotno:i})
+   if(tsl){
     if(tsl.slot.length==10)
       {
         continue
       }
+    }
   
   
    {
+    
     let f=0
     const arr=["10:00 am","10:30 am","11:00 am","11:30 am","12:00 pm","12:30 pm","1:00 pm",""]
   const obj={}
     obj.slot={
        time:arr[i-1],
       userId:savedata._id,
-      date:new Date()
+      date:new Date(),
+     status:savedata.status
      }
 
 
-  
+   if(tsl){  
   if(tsl.slot.length<10){
      f++
      const newbc=tsl.slot
@@ -62,18 +66,19 @@ exports.createuser=async function(req,res){
     const saveuser=await timeslot.findOneAndUpdate({slotno:tsl.slotno},{$set:{slot:newbc}},{new:true})
     return res.status(200).send({status:true,msg:"booking succcessful",data:saveuser}) 
     
-  }else{
+  }}else{
         const arr=["10:00 am","10:30 am","11:00 am","11:30 am","12:00 pm","12:30 pm","1:00 pm",""]
-          let i=1;
-          obj.slot.time=arr[i],
-          obj.slotno=i+1
+          
+          obj.slot.time=arr[i-1],
+          obj.slotno=i
+          
       }
 
-        console.log("-----"+obj)
+        
         const saveuser=await timeslot.create(obj)
         req.id=savedata._id
       
-        console.log("++++++"+req.id)
+        
         return res.status(201).send({status:false,msg:"booking successfully",data:saveuser})
        }
     }
@@ -159,17 +164,16 @@ exports.registerforsecondose=async function(req,res){
       
       if(Object.keys(data).length==0){return res.status(400).send({status:false,msg:"Please enter data in body"})}
       
-      if(!Name){return res.status(400).send({status:false,msg:"Please enter Name"})}
-      if(!PhoneNumber){return res.status(400).send({status:false,msg:"Please enter PhoneNumber"})}
-      if(!Age){return res.status(400).send({status:false,msg:"Please enter Age"})}
-      if(!Pincode){return res.status(400).send({status:false,msg:"Please enter Pincode"})}
-      if(!AadharNo){return res.status(400).send({status:false,msg:"Please enter AadharNo"})}
-    
-      if(!isValide(Name)){return res.status(400).send({status:false,msg:"Please enter valid name"})}
-      if(!PhoneNumber.match(/^[0-9]{10}$/)){return res.status(400).send({status:false,msg:"Please enter valid Phone number"})}
-      if(!Age.match(/^[0-9]*$/)){return res.status(400).send({status:false,msg:"Please enter valid age"})}
-      if(!Pincode.match(/^[0-9]{6}$/)){return res.status(400),send({status:false,msg:"Please enter valid Pincode"})}
-      if(!AadharNo.match(/[0-9]{4}-[0-9]{4}-[0-9]{3,10}/)){return res.status(400).send({status:false,msg:"Please enter valid aadhar no XXXX-XXXX-XXX"})}
+      if(Name){
+      if(!isValide(Name)){return res.status(400).send({status:false,msg:"Please enter valid name"})}}
+      if(PhoneNumber){
+      if(!PhoneNumber.match(/^[0-9]{10}$/)){return res.status(400).send({status:false,msg:"Please enter valid Phone number"})}}
+      if(Age){
+      if(!Age.match(/^[0-9]*$/)){return res.status(400).send({status:false,msg:"Please enter valid age"})}}
+      if(Pincode){
+      if(!Pincode.match(/^[0-9]{6}$/)){return res.status(400),send({status:false,msg:"Please enter valid Pincode"})}}
+      if(AadharNo){
+      if(!AadharNo.match(/[0-9]{4}-[0-9]{4}-[0-9]{3,10}/)){return res.status(400).send({status:false,msg:"Please enter valid aadhar no XXXX-XXXX-XXX"})}}
       let status="Firs dose complite"
      
     
@@ -177,13 +181,14 @@ exports.registerforsecondose=async function(req,res){
       const savedata=await usermodel.findOneAndUpdate({PhoneNumber:PhoneNumber},{$set:{status:status}},{new:true})
       for(let i=1; i<15; i++)
       {
-        //console.log("==="+savedata._id)
+        
       const tsl=await timeslot.findOne({slotno:i})
+        if(tsl){
         if(tsl.slot.length==10)
           {
             continue
           }
-      
+        }
       
        {
         let f=0
@@ -192,30 +197,31 @@ exports.registerforsecondose=async function(req,res){
         obj.slot={
            time:arr[i-1],
           userId:savedata._id,
-          date:new Date()
+          date:new Date(),
+          status:savedata.status
          }
     
     
-      
-      if(tsl.slot.length<10){
+        if(tsl){
+         if(tsl.slot.length<10){
          f++
          const newbc=tsl.slot
          newbc.push(obj.slot)
         const saveuser=await timeslot.findOneAndUpdate({slotno:tsl.slotno},{$set:{slot:newbc}},{new:true})
         return res.status(200).send({status:true,msg:"second does booking successfull",data:saveuser}) 
         
+      }
       }else{
             const arr=["10:00 am","10:30 am","11:00 am","11:30 am","12:00 pm","12:30 pm","1:00 pm",""]
               let i=1;
               obj.slot.time=arr[i],
-              obj.slotno=i+1
+              obj.slotno=i+1,
+              obj.slot.status=savedata.status
           }
     
-            console.log("-----"+obj)
+          
             const saveuser=await timeslot.create(obj)
             req.id=savedata._id
-          
-            console.log("++++++"+req.id)
             return res.status(201).send({status:false,msg:"second dose booking successfull",data:saveuser})
            }
         } 
