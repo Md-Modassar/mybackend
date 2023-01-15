@@ -9,9 +9,11 @@ const Result=({name,score})=>{
         history.push("/")
      }
     },[name,history])
+    
     return (
-        <div className="result">
-            <span className="title">Final Score:{score}</span>
+        <div className="result">    
+            
+            <span className="title">Final Score:{score}  </span>
             <Button
               variant="contained"
               color="secondary"
