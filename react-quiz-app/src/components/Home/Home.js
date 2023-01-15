@@ -49,7 +49,7 @@ const Home=({name,setName,fetchQuestions})=>{
                </TextField>
                
               <Button style={{marginBottom:10}} variant="contained" color="primary" 
-                onClick={handlesumbit}>Start Quiz</Button>
+                onClick={handlesumbit}>Start Examination</Button>
               </div>
             </div>
            <img src="/quizp.svg" className="banner" alt="quiz img "/>
